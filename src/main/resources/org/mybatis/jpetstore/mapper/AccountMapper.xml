@@ -41,7 +41,8 @@
           PROFILE.FAVCATEGORY AS favouriteCategoryId,
           PROFILE.MYLISTOPT AS listOption,
           PROFILE.BANNEROPT AS bannerOption,
-          BANNERDATA.BANNERNAME
+          BANNERDATA.BANNERNAME,
+           (SELECT COUNT(*) FROM ADMIN WHERE adminid = #{username}) as auth
     FROM ACCOUNT, PROFILE, SIGNON, BANNERDATA
     WHERE ACCOUNT.USERID = #{username}
       AND SIGNON.USERNAME = ACCOUNT.USERID
@@ -67,7 +68,8 @@
       PROFILE.FAVCATEGORY AS favouriteCategoryId,
       PROFILE.MYLISTOPT AS listOption,
       PROFILE.BANNEROPT AS bannerOption,
-      BANNERDATA.BANNERNAME
+      BANNERDATA.BANNERNAME,
+      (SELECT COUNT(*) FROM ADMIN WHERE adminid = #{param1}) as auth
     FROM ACCOUNT, PROFILE, SIGNON, BANNERDATA
     WHERE ACCOUNT.USERID = #{param1}
       AND SIGNON.PASSWORD = #{param2}

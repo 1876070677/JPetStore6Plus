@@ -23,7 +23,7 @@
 
 <div id="Catalog">
 
-<h2>${actionBean.category.name}</h2>
+	<h2>${actionBean.category.name}</h2>
 
 <table>
 	<tr>

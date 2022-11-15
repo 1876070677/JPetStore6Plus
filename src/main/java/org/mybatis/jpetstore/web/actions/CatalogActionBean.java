@@ -17,15 +17,15 @@ package org.mybatis.jpetstore.web.actions;
 
 import java.util.List;
 
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.SessionScope;
+import net.sourceforge.stripes.action.*;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.service.CatalogService;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * The Class CatalogActionBean.
@@ -40,8 +40,10 @@ public class CatalogActionBean extends AbstractActionBean {
   private static final String MAIN = "/WEB-INF/jsp/catalog/Main.jsp";
   private static final String VIEW_CATEGORY = "/WEB-INF/jsp/catalog/Category.jsp";
   private static final String VIEW_PRODUCT = "/WEB-INF/jsp/catalog/Product.jsp";
+  private static final String VIEW_ADMIN_PRODUCT = "/WEB-INF/jsp/admin/Product.jsp";
   private static final String VIEW_ITEM = "/WEB-INF/jsp/catalog/Item.jsp";
   private static final String SEARCH_PRODUCTS = "/WEB-INF/jsp/catalog/SearchProducts.jsp";
+  private static final String ADMIN_DASHBOARD = "/WEB-INF/jsp/admin/Dashboard.jsp";
 
   @SpringBean
   private transient CatalogService catalogService;
@@ -158,6 +160,23 @@ public class CatalogActionBean extends AbstractActionBean {
     return new ForwardResolution(VIEW_CATEGORY);
   }
 
+  public Resolution viewAllCategory() {
+    HttpSession session = context.getRequest().getSession();
+    AccountActionBean accountBean = (AccountActionBean) session.getAttribute("/actions/Account.action");
+    clear();
+
+    if (accountBean == null || !accountBean.isAuthenticated()) {
+      setMessage("Please sign on and try checking out again.");
+      return new RedirectResolution(CatalogActionBean.class);
+    } else if (accountBean.getAccount().getAuth() == 0) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    } else {
+      productList = catalogService.getProductListByCategory();
+      return new ForwardResolution(ADMIN_DASHBOARD);
+    }
+  }
+
   /**
    * View product.
    *
@@ -171,6 +190,22 @@ public class CatalogActionBean extends AbstractActionBean {
     return new ForwardResolution(VIEW_PRODUCT);
   }
 
+  public Resolution manageProduct() {
+    HttpSession session = context.getRequest().getSession();
+    AccountActionBean accountBean = (AccountActionBean) session.getAttribute("/actions/Account.action");
+
+    if (accountBean == null || !accountBean.isAuthenticated()) {
+      setMessage("Please sign on and try checking out again.");
+      return new RedirectResolution(CatalogActionBean.class);
+    } else if (accountBean.getAccount().getAuth() == 0) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    }else if (productId != null) {
+      itemList = catalogService.getItemListByProduct(productId);
+      product = catalogService.getProduct(productId);
+    }
+    return new ForwardResolution(VIEW_ADMIN_PRODUCT);
+  }
   /**
    * View item.
    *

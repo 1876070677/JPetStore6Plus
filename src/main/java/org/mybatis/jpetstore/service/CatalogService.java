@@ -59,6 +59,9 @@ public class CatalogService {
   public List<Product> getProductListByCategory(String categoryId) {
     return productMapper.getProductListByCategory(categoryId);
   }
+  public List<Product> getProductListByCategory() {
+    return productMapper.getAllProductListByCategory();
+  }
 
   /**
    * Search product list.
