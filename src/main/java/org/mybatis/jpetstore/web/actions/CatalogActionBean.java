@@ -180,17 +180,11 @@ public class CatalogActionBean extends AbstractActionBean {
   }
 
   public Resolution viewAllCategory() {
-    HttpSession session = context.getRequest().getSession();
-    AccountActionBean accountBean = (AccountActionBean) session.getAttribute("/actions/Account.action");
     clear();
-
-    if (accountBean == null || !accountBean.isAuthenticated()) {
-      setMessage("Please sign on and try checking out again.");
-      return new RedirectResolution(CatalogActionBean.class);
-    } else if (accountBean.getAccount().getAuth() == 0) {
+    if (!isAdmin()) {
       setMessage("You are not Admin!!");
       return new RedirectResolution(CatalogActionBean.class);
-    } else {
+    }else {
       productList = catalogService.getProductListByCategory();
       category = catalogService.getCategory(categoryId);
       return new ForwardResolution(ADMIN_DASHBOARD);
@@ -211,28 +205,33 @@ public class CatalogActionBean extends AbstractActionBean {
   }
 
   public Resolution manageProduct() {
-    HttpSession session = context.getRequest().getSession();
-    AccountActionBean accountBean = (AccountActionBean) session.getAttribute("/actions/Account.action");
 
-    if (accountBean == null || !accountBean.isAuthenticated()) {
-      setMessage("Please sign on and try checking out again.");
-      return new RedirectResolution(CatalogActionBean.class);
-    } else if (accountBean.getAccount().getAuth() == 0) {
+    if (!isAdmin()) {
       setMessage("You are not Admin!!");
       return new RedirectResolution(CatalogActionBean.class);
     }else if (productId != null) {
       itemList = catalogService.getItemListByProduct(productId);
       product = catalogService.getProduct(productId);
+      return new ForwardResolution(VIEW_ADMIN_PRODUCT);
+    } else {
+      return new ForwardResolution(ADMIN_DASHBOARD);
     }
-    return new ForwardResolution(VIEW_ADMIN_PRODUCT);
   }
 
   public Resolution addItemForm() {
+    if (!isAdmin()) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    }
     item = new Item();
     return new ForwardResolution(VIEW_ADD_ITEM_FORM);
   }
 
   public Resolution addItem() {
+    if (!isAdmin()) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    }
     item.setItemId(itemId);
     item.setProduct(product);
     catalogService.insertItem(item);
@@ -242,16 +241,34 @@ public class CatalogActionBean extends AbstractActionBean {
   }
 
   public Resolution updateItemForm() {
+    if (!isAdmin()) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    }
     item = catalogService.getItem(itemId);
     product = item.getProduct();
     System.out.println(item.getAttribute1());
     return new ForwardResolution(VIEW_EDIT_ITEM_FORM);
   }
   public Resolution updateItem() {
+    if (!isAdmin()) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    }
     catalogService.updateItem(item);
     itemList = catalogService.getItemListByProduct(productId);
     clearItem();
     //product = catalogService.getProduct(productId);
+    return new ForwardResolution(VIEW_ADMIN_PRODUCT);
+  }
+
+  public Resolution deleteItem() {
+    if (!isAdmin()) {
+      setMessage("You are not Admin!!");
+      return new RedirectResolution(CatalogActionBean.class);
+    }
+    catalogService.deleteItem(itemId);
+    itemList = catalogService.getItemListByProduct(productId);
     return new ForwardResolution(VIEW_ADMIN_PRODUCT);
   }
   /**
@@ -278,6 +295,20 @@ public class CatalogActionBean extends AbstractActionBean {
       productList = catalogService.searchProductList(keyword.toLowerCase());
       return new ForwardResolution(SEARCH_PRODUCTS);
     }
+  }
+
+  public boolean isAdmin() {
+    HttpSession session = context.getRequest().getSession();
+    AccountActionBean accountBean = (AccountActionBean) session.getAttribute("/actions/Account.action");
+
+    if (accountBean == null || !accountBean.isAuthenticated()) {
+      //setMessage("Please sign on and try checking out again.");
+      return false;
+    } else if (accountBean.getAccount().getAuth() == 0) {
+      //setMessage("You are not Admin!!");
+      return false;
+    }
+    return true;
   }
 
   /**

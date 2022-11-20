@@ -101,4 +101,8 @@ public class CatalogService {
     itemMapper.insertItem(item);
     itemMapper.insertInventory(item);
   }
+
+  public void deleteItem(String itemId) {
+    itemMapper.deleteItem(itemId);
+  }
 }

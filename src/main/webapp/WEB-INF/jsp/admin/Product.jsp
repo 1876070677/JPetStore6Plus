@@ -22,10 +22,8 @@
 
 <div id="BackLink"><stripes:link
         beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
-        event="viewCategory">
-    <stripes:param name="categoryId"
-                   value="${actionBean.product.categoryId}" />
-    Return to ${actionBean.product.categoryId}
+        event="viewAllCategory">
+    Return to All Product
 </stripes:link></div>
 
 <div id="Catalog">

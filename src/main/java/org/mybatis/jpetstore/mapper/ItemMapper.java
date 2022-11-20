@@ -41,4 +41,6 @@ public interface ItemMapper {
 
   void insertInventory(Item item);
 
+  void deleteItem(String itemId);
+
 }

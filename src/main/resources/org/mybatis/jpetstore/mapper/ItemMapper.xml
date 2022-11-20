@@ -101,4 +101,12 @@
     VALUES
         (#{itemId}, #{quantity})
   </insert>
+
+  <delete id="deleteItem" >
+    DELETE FROM a, b
+    USING ITEM AS a
+    INNER JOIN INVENTORY AS b
+    ON a.itemid = b.itemid
+    WHERE b.itemid = #{itemId}
+  </delete>
 </mapper>
