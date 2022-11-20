@@ -35,4 +35,10 @@ public interface ItemMapper {
 
   Item getItem(String itemId);
 
+  void updateItem(Item item);
+
+  void insertItem(Item item);
+
+  void insertInventory(Item item);
+
 }

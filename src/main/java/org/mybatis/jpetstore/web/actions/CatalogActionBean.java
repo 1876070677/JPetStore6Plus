@@ -15,11 +15,13 @@
  */
 package org.mybatis.jpetstore.web.actions;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import net.sourceforge.stripes.action.*;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 
+import net.sourceforge.stripes.validation.Validate;
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Product;
@@ -44,6 +46,9 @@ public class CatalogActionBean extends AbstractActionBean {
   private static final String VIEW_ITEM = "/WEB-INF/jsp/catalog/Item.jsp";
   private static final String SEARCH_PRODUCTS = "/WEB-INF/jsp/catalog/SearchProducts.jsp";
   private static final String ADMIN_DASHBOARD = "/WEB-INF/jsp/admin/Dashboard.jsp";
+
+  private static final String VIEW_EDIT_ITEM_FORM = "/WEB-INF/jsp/admin/EditItem.jsp";
+  private static final String VIEW_ADD_ITEM_FORM = "/WEB-INF/jsp/admin/AddItem.jsp";
 
   @SpringBean
   private transient CatalogService catalogService;
@@ -90,6 +95,7 @@ public class CatalogActionBean extends AbstractActionBean {
     return itemId;
   }
 
+  @Validate(required = true, on = {"addItem"})
   public void setItemId(String itemId) {
     this.itemId = itemId;
   }
@@ -142,6 +148,19 @@ public class CatalogActionBean extends AbstractActionBean {
     this.itemList = itemList;
   }
 
+  @Validate(required = true, on = {"updateItem", "addItem"})
+  public void setAttribute1(String attribute1) {item.setAttribute1(attribute1);}
+
+  public String getAttribute1() { return item.getAttribute1(); }
+  @Validate(required = true, on = {"updateItem", "addItem"})
+  public void setListPrice(BigDecimal listPrice) {item.setListPrice(listPrice);}
+
+  public BigDecimal getListPrice() { return item.getListPrice(); }
+  @Validate(required = true, on = {"updateItem", "addItem"})
+  public void setQuantity(int quantity) {item.setQuantity(quantity);}
+
+  public int getQuantity() { return item.getQuantity(); }
+
   @DefaultHandler
   public ForwardResolution viewMain() {
     return new ForwardResolution(MAIN);
@@ -173,6 +192,7 @@ public class CatalogActionBean extends AbstractActionBean {
       return new RedirectResolution(CatalogActionBean.class);
     } else {
       productList = catalogService.getProductListByCategory();
+      category = catalogService.getCategory(categoryId);
       return new ForwardResolution(ADMIN_DASHBOARD);
     }
   }
@@ -204,6 +224,34 @@ public class CatalogActionBean extends AbstractActionBean {
       itemList = catalogService.getItemListByProduct(productId);
       product = catalogService.getProduct(productId);
     }
+    return new ForwardResolution(VIEW_ADMIN_PRODUCT);
+  }
+
+  public Resolution addItemForm() {
+    item = new Item();
+    return new ForwardResolution(VIEW_ADD_ITEM_FORM);
+  }
+
+  public Resolution addItem() {
+    item.setItemId(itemId);
+    item.setProduct(product);
+    catalogService.insertItem(item);
+    itemList = catalogService.getItemListByProduct(productId);
+    clearItem();
+    return new ForwardResolution(VIEW_ADMIN_PRODUCT);
+  }
+
+  public Resolution updateItemForm() {
+    item = catalogService.getItem(itemId);
+    product = item.getProduct();
+    System.out.println(item.getAttribute1());
+    return new ForwardResolution(VIEW_EDIT_ITEM_FORM);
+  }
+  public Resolution updateItem() {
+    catalogService.updateItem(item);
+    itemList = catalogService.getItemListByProduct(productId);
+    clearItem();
+    //product = catalogService.getProduct(productId);
     return new ForwardResolution(VIEW_ADMIN_PRODUCT);
   }
   /**
@@ -249,6 +297,11 @@ public class CatalogActionBean extends AbstractActionBean {
     itemId = null;
     item = null;
     itemList = null;
+  }
+
+  public void clearItem() {
+    item = null;
+    itemId = null;
   }
 
 }

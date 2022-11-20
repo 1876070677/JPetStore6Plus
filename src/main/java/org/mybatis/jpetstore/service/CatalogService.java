@@ -25,6 +25,7 @@ import org.mybatis.jpetstore.mapper.CategoryMapper;
 import org.mybatis.jpetstore.mapper.ItemMapper;
 import org.mybatis.jpetstore.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The Class CatalogService.
@@ -87,7 +88,17 @@ public class CatalogService {
     return itemMapper.getItem(itemId);
   }
 
+  public void updateItem(Item item) {
+    itemMapper.updateItem(item);
+  }
+
   public boolean isItemInStock(String itemId) {
     return itemMapper.getInventoryQuantity(itemId) > 0;
+  }
+
+  @Transactional
+  public void insertItem(Item item) {
+    itemMapper.insertItem(item);
+    itemMapper.insertInventory(item);
   }
 }

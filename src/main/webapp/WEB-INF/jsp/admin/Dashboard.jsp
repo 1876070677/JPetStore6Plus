@@ -42,6 +42,7 @@
                                   beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
                                   event="manageProduct">
                     <stripes:param name="productId" value="${product.productId}" />
+                    <stripes:param name="categoryId" value="${product.categoryId}" />
                     Edit Item
                 </stripes:link></td>
             </tr>

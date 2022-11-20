@@ -79,4 +79,26 @@
     WHERE ITEMID = #{itemId}
   </update>
 
+  <update id="updateItem" parameterType="Item">
+    UPDATE ITEM as I, INVENTORY as V SET
+        I.listprice = #{listPrice},
+        I.attr1 = #{attribute1},
+        V.qty = #{quantity}
+        WHERE I.itemid = V.itemid
+            and V.itemid = #{itemId}
+  </update>
+
+  <insert id="insertItem" parameterType="Item">
+    INSERT INTO ITEM
+        (itemid, productid, listprice, attr1)
+    VALUES
+        (#{itemId}, #{product.productId}, #{listPrice}, #{attribute1})
+  </insert>
+
+  <insert id="insertInventory" parameterType="Item">
+    INSERT INTO INVENTORY
+        (itemid, qty)
+    VALUES
+        (#{itemId}, #{quantity})
+  </insert>
 </mapper>
