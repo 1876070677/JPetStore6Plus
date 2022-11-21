@@ -247,7 +247,6 @@ public class CatalogActionBean extends AbstractActionBean {
     }
     item = catalogService.getItem(itemId);
     product = item.getProduct();
-    System.out.println(item.getAttribute1());
     return new ForwardResolution(VIEW_EDIT_ITEM_FORM);
   }
   public Resolution updateItem() {
