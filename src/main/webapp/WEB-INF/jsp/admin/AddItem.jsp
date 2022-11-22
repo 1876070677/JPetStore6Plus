@@ -50,10 +50,6 @@
         <td><stripes:text name="listPrice"/></td>
         <td><stripes:text name="quantity"/></td>
       </tr>
-      <tr>
-        <td>
-        </td>
-      </tr>
     </table>
     <stripes:submit name="addItem" value="Submit" />
   </stripes:form>

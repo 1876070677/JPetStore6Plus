@@ -87,7 +87,14 @@
             My Account
 	      </stripes:link>
 	</c:if>
-</c:if> <img align="middle" src="../images/separator.gif" /> <a
+</c:if> <img align="middle" src="../images/separator.gif" />
+	<stripes:link
+			beanclass="org.mybatis.jpetstore.web.actions.DiaryActionBean"
+			event="writeDiaryForm">
+		Diary
+	</stripes:link>
+	<img align="middle" src="../images/separator.gif" />
+	<a
 	href="../help.html">?</a><img align="middle" src="../images/separator.gif" />
 	<c:if test="${sessionScope.accountBean != null}">
 		<c:if test="${sessionScope.accountBean.authenticated}">
