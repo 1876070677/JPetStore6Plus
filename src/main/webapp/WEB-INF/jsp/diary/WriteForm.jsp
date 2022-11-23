@@ -30,13 +30,17 @@
                   focus="">
         <table>
             <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Content</th>
+                <td><stripes:file name="petImage" accept=".jpg,.png,.jpeg"/></td>
             </tr>
             <tr>
-                <td><stripes:file name="petImage" accept=".jpg,.png,.jpeg"/></td>
+                <stripes:select name="diary.categoryid">
+                    <stripes:options-collection collection="${actionBean.categories}" />
+                </stripes:select>
+            </tr>
+            <tr>
                 <td><stripes:text name="diary.title"/></td>
+            </tr>
+            <tr>
                 <td><stripes:text name="diary.content"/></td>
             </tr>
         </table>

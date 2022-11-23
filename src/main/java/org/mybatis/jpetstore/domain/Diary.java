@@ -12,6 +12,24 @@ public class Diary implements Serializable {
     private String categoryid;
     private String date;
     private String title;
+    private int comments;
+    private int likes;
+
+    public void setComments(int comments) {
+        this.comments = comments;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getComments() {
+        return comments;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
 
     public int getNo() {
         return no;
