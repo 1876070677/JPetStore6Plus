@@ -6,4 +6,9 @@
 *.iml
 /build
 .mvn/wrapper/maven-wrapper.jar
+
+# DATABASE INFO
 /src/main/resources/application.properties
+
+# STATIC FOLDER - IMAGE UPLOAD
+/src/main/webapp/static
