@@ -1,5 +1,7 @@
 package org.mybatis.jpetstore.domain;
 
+import net.sourceforge.stripes.validation.Validate;
+
 import java.io.Serializable;
 
 public class Diary implements Serializable {
@@ -43,6 +45,7 @@ public class Diary implements Serializable {
         this.imgurl = imgurl;
     }
 
+    @Validate(required = true, on = { "addDiary" })
     public void setUserid(String userid) {
         this.userid = userid;
     }
@@ -55,10 +58,12 @@ public class Diary implements Serializable {
         this.date = date;
     }
 
+    @Validate(required = true, on = { "addDiary" })
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Validate(required = true, on = { "addDiary" })
     public void setContent(String content) {
         this.content = content;
     }

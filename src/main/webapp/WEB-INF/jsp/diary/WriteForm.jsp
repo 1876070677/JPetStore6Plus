@@ -43,6 +43,10 @@
             <tr>
                 <td><stripes:text name="diary.content"/></td>
             </tr>
+            <tr>
+                    ${sessionScope.accountBean.account.username}
+                <stripes:param name="diary.userid" value="${sessionScope.accountBean.account.username}" />
+            </tr>
         </table>
         <stripes:submit name="addDiary" value="Submit" />
     </stripes:form>
