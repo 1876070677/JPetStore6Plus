@@ -27,4 +27,18 @@
         insert into DIARY (userid, title, content, categoryid, imgurl)
         VALUES (#{userid}, #{title}, #{content}, #{categoryid}, #{imgurl});
     </insert>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from DIARY;
+    </select>
+
+    <select id="getDiaryList" parameterType="int" resultType="Diary">
+        select no, imgurl, title, categoryid, userid, date,
+          (select count(*) from LIKES where d_no = no) as likes,
+          (select count(*) from COMMENTS where d_no=no) as comments
+        from DIARY order by no desc
+        limit #{offset}, 6;
+    </select>
+
+
 </mapper>

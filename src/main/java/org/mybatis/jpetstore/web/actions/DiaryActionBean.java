@@ -28,6 +28,7 @@ public class DiaryActionBean extends AbstractActionBean{
 
     private static final String MAIN = "/WEB-INF/jsp/catalog/Main.jsp";
     private static final String WRITE_DIARY_FORM = "/WEB-INF/jsp/diary/WriteForm.jsp";
+    private static final String VIEW_DIARY = "/WEB-INF/jsp/diary/DiaryList.jsp";
     private static final List<String> CATEGORY_LIST;
 
     static {
@@ -40,6 +41,39 @@ public class DiaryActionBean extends AbstractActionBean{
     private FileBean petImage;
 
     private Diary diary = new Diary();
+    private List<Diary> diaryList;
+    private int pageNumber;
+    private int totalCount;
+    private int beginPage;
+    private int endPage;
+
+    public List<Diary> getDiaryList() {
+        return diaryList;
+    }
+
+    public void setDiaryList(List<Diary> diaryList) {
+        this.diaryList = diaryList;
+    }
+
+    public int getBeginPage() {
+        return beginPage;
+    }
+
+    public int getEndPage() {
+        return endPage;
+    }
+
+    public void setBeginPage(int beginPage) {
+        this.beginPage = beginPage;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
 
     public Diary getDiary() {
         return diary;
@@ -71,10 +105,11 @@ public class DiaryActionBean extends AbstractActionBean{
             setMessage("Need Login!!");
             return new ForwardResolution(MAIN);
         }
-        System.out.println(diary.getUserid() + diary.getCategoryid());
+        //System.out.println(diary.getUserid() + diary.getCategoryid());
         String now = new SimpleDateFormat("yyyyMMddHmsS").format(new Date());  //현재시간
         String saveDir = context.getRequest().getSession().getServletContext().getRealPath("/static");
         File dir = new File(saveDir);
+        diary.setImgurl("default.png");
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -85,7 +120,7 @@ public class DiaryActionBean extends AbstractActionBean{
                 i = fileName.lastIndexOf("."); // 파일 확장자 위치
                 String realFileName = now + fileName.substring(i, fileName.length());  //현재시간과 확장자 합치기
                 diary.setImgurl(realFileName);
-                System.out.println(saveDir + "/" + realFileName);
+                //System.out.println(saveDir + "/" + realFileName);
                 petImage.save(new File(saveDir + "/" + realFileName));
             } catch (IllegalStateException | IOException e) {
                 e.printStackTrace();
@@ -94,6 +129,26 @@ public class DiaryActionBean extends AbstractActionBean{
         diaryService.addDiary(diary);
 
         return new ForwardResolution(WRITE_DIARY_FORM);
+    }
+
+    public Resolution viewDiary() {
+        paging();
+        int offset = (pageNumber - 1) * 6;
+        diaryList = diaryService.getDiaryList(offset);
+        return new ForwardResolution(VIEW_DIARY);
+    }
+
+    public void paging() {
+        totalCount = diaryService.getTotal();
+        endPage = ((int)Math.ceil(pageNumber / (double)10)) * 10;
+
+        beginPage = endPage - (10 - 1);
+
+        int totalPage = (int)Math.ceil(totalCount / (double)6);
+
+        if (totalPage < endPage) {
+            endPage = totalPage;
+        }
     }
 
     public boolean isAuthenticated() {

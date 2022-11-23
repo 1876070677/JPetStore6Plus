@@ -6,6 +6,8 @@ import org.mybatis.jpetstore.mapper.DiaryMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class DiaryService {
     private final DiaryMapper diaryMapper;
@@ -17,4 +19,8 @@ public class DiaryService {
     public void addDiary(Diary diary) {
         diaryMapper.addDiary(diary);
     }
+
+    public int getTotal() { return diaryMapper.getTotal(); }
+
+    public List<Diary> getDiaryList(int offset) { return diaryMapper.getDiaryList(offset); }
 }

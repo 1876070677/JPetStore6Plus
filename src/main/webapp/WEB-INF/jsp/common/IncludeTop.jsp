@@ -15,7 +15,7 @@
        limitations under the License.
 
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="stripes"
 	uri="http://stripes.sourceforge.net/stripes.tld"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -33,7 +33,7 @@
 <meta name="generator"
 	content="HTML Tidy for Linux/x86 (vers 1st November 2002), see www.w3.org" />
 <title>JPetStore Demo</title>
-<meta content="text/html; charset=windows-1252"
+<meta content="text/html; charset=UTF-8"
 	http-equiv="Content-Type" />
 <meta http-equiv="Cache-Control" content="max-age=0" />
 <meta http-equiv="Cache-Control" content="no-cache" />
@@ -88,6 +88,13 @@
 	      </stripes:link>
 	</c:if>
 </c:if> <img align="middle" src="../images/separator.gif" />
+	<stripes:link
+			beanclass="org.mybatis.jpetstore.web.actions.DiaryActionBean"
+			event="viewDiary">
+		<stripes:param name="pageNumber" value="1" />
+		PetDiary
+	</stripes:link>
+	<img align="middle" src="../images/separator.gif" />
 	<stripes:link
 			beanclass="org.mybatis.jpetstore.web.actions.DiaryActionBean"
 			event="writeDiaryForm">
