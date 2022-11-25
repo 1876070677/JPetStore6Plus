@@ -112,12 +112,20 @@
                     </span>
                     </div>
                     <div style="display: flex; align-items: center; color:#ECECEC;">
-                        ${diary.likes}
+                        ${diary.likes} 좋아요
                     </div>
                 </div>
             </div>
         </c:forEach>
     </div>
+    <c:if test="${actionBean.prev}">
+        <stripes:link
+                beanclass="org.mybatis.jpetstore.web.actions.DiaryActionBean"
+                event="viewDiary">
+            prev
+            <stripes:param name="pageNumber" value="${actionBean.pageNumber - 1}" />
+        </stripes:link>
+    </c:if>
     <c:forEach begin="${actionBean.beginPage}" end="${actionBean.endPage}" step="1" var="index">
         <c:choose>
             <c:when test="${actionBean.pageNumber==index}">
@@ -133,6 +141,14 @@
             </c:otherwise>
         </c:choose>
     </c:forEach>
+    <c:if test="${actionBean.next}">
+        <stripes:link
+                beanclass="org.mybatis.jpetstore.web.actions.DiaryActionBean"
+                event="viewDiary">
+            next
+            <stripes:param name="pageNumber" value="${actionBean.pageNumber + 1}" />
+        </stripes:link>
+    </c:if>
 </div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>

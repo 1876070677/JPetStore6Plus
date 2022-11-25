@@ -46,6 +46,16 @@ public class DiaryActionBean extends AbstractActionBean{
     private int totalCount;
     private int beginPage;
     private int endPage;
+    private boolean next = false;
+    private boolean prev = false;
+
+    public boolean getNext() {
+        return next;
+    }
+
+    public boolean getPrev() {
+        return prev;
+    }
 
     public List<Diary> getDiaryList() {
         return diaryList;
@@ -148,7 +158,11 @@ public class DiaryActionBean extends AbstractActionBean{
 
         if (totalPage < endPage) {
             endPage = totalPage;
+            next = false;
+        } else {
+            next = true;
         }
+        prev = (beginPage == 1) ? false : true;
     }
 
     public boolean isAuthenticated() {
